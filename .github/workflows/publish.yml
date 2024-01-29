@@ -1,0 +1,27 @@
+name: Publish to PyPI
+on: 
+  release:
+    types: [published]
+jobs:
+  pypi:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+      - name: Install dependencies
+        run: python3 -m pip install --upgrade pip setuptools wheel
+      - run: python3 -m pip install --upgrade build && python3 -m build
+      - name: Test with pytest
+        run: |
+          pip install pytest pytest-cov
+          pytest /tests --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+      - name: Publish package
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
