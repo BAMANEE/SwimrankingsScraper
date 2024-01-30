@@ -18,9 +18,7 @@ jobs:
         run: python3 -m pip install --upgrade pip setuptools wheel
       - run: python3 -m pip install --upgrade build && python3 -m build
       - name: Test with pytest
-        run: |
-          pip install pytest pytest-cov
-          pytest /tests --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+        run: python -m unittest tests/test_swimrankingsscraper.py
       - name: Publish package
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
