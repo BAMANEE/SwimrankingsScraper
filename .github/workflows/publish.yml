@@ -15,10 +15,13 @@ jobs:
         with:
           python-version: '3.10'
       - name: Install dependencies
-        run: python3 -m pip install --upgrade pip setuptools wheel
-      - run: python3 -m pip install --upgrade build && python3 -m build
+        uses: py-actions/py-dependency-install@v4
+        with:
+          path: requirements.txt
       - name: Test with pytest
         run: python -m unittest tests/test_swimrankingsscraper.py
+      - name: Build package
+        run: python3 -m pip install --upgrade build && python3 -m build
       - name: Publish package
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
