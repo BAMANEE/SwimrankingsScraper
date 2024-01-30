@@ -27,7 +27,7 @@ setup(
     ],
     packages=find_packages(include=['swimrankingsscraper']),
     include_package_data=True,
-    install_requires=['requests', 'beautifulsoup4'],
+    install_requires=['requests', 'beautifulsoup4', 'lxml'],
     setup_requires=['pytest-runner'],
     tests_require=['pytest==8.0.0'],
     test_suite='tests',
