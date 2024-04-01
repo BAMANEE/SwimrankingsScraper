@@ -570,6 +570,8 @@ class Meet(ScraperMixin):
         for row in tables[race_id-1].find_all('tr', {'class': ['meetResult0', 'meetResult1']}):
             name_cell = row.find('td', {'class': 'name'})
             name = name_cell.find('a').get_text(strip=True)
+            name_url = name_cell.find('a')['href']
+            athlete_id = parse_qs(urlparse(name_url).query)['athleteId'][0]
             club_cell = row.find_all('td', {'class': 'name'})[1]
             club_name = club_cell.find('a').get_text(strip=True)
             time_cell = row.find('td', {'class': 'swimtime'})
@@ -582,7 +584,7 @@ class Meet(ScraperMixin):
             split_times = re.findall(pattern, split_times_rough)
             result_url = time_cell.find('a')['href']
             result_id = parse_qs(urlparse(result_url).query)['id'][0]
-            results.append({'result_id': result_id, 'name': name, 'club_name': club_name, 'time': time, 'split_times': split_times})
+            results.append({'result_id': result_id, 'athlete_id': athlete_id, 'name': name, 'club_name': club_name, 'time': time, 'split_times': split_times})
         return results
 
 
