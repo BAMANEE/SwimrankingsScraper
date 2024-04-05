@@ -360,14 +360,14 @@ class Athlete(ScraperMixin):
         super().__init__(sessionManager, update_interval)
         self.athlete_id = athlete_id
 
-    def list_personal_bests(self) -> list:
+    def list_personal_bests(self, season="") -> list:
         """
         Retrieves a list of personal bests for the athlete.
 
         Returns:
         - `list`: A list of dictionaries containing information about each personal best.
         """
-        params = {'page': 'athleteDetail', 'athleteId': self.athlete_id}
+        params = {'page': 'athleteDetail', 'athleteId': self.athlete_id, 'pbest': season}
         try:
             soup = self._get_page_content(params)
             table = soup.find('table', {'class': 'athleteBest'})
@@ -380,7 +380,7 @@ class Athlete(ScraperMixin):
             event_name = event_cell.find('a').get_text(strip=True)
             course_cell = row.find('td', {'class': 'course'})
             course_length = course_cell.get_text(strip=True)
-            time_cell = row.find('td', {'class': 'time'})
+            time_cell = row.find('td', {'class': ['time', 'swimtimeImportant']})
             time = convert_time(time_cell.get_text(strip=True))
             result_url = time_cell.find('a')['href']
             result_id = int(parse_qs(urlparse(result_url).query)['id'][0])
@@ -829,4 +829,4 @@ if __name__ == '__main__':
     # Example usage
     scraper = SwimrankingsScraper()
     athelete = scraper.get_athlete('4292888')
-    print(athelete.list_meets())
+    print(athelete.list_personal_bests(season='2024'))
