@@ -26,7 +26,6 @@ class TestSwimrankingsScraper(unittest.TestCase):
         # Ensure that the Athlete instance is created with the correct parameters
         self.assertEqual(athlete_instance.athlete_id, athlete_id)
         self.assertEqual(athlete_instance.sessionManager, self.mock_session_manager)
-        
 
     def test_get_meet(self):
         meet_id = 789012
@@ -187,7 +186,7 @@ class TestAthlete(unittest.TestCase):
         self.personal_best = self.athlete.list_personal_bests()
 
         # Assertions 
-        self.athlete._get_page_content.assert_called_once_with({'page': 'athleteDetail', 'athleteId': self.athete_id})
+        self.athlete._get_page_content.assert_called_once_with({'page': 'athleteDetail', 'athleteId': self.athete_id, 'pbest': ''})
         self.assertEqual(self.personal_best, values_for_testing.athlete_personal_best)
 
     def test_list_personal_bests_failure(self):
@@ -198,8 +197,19 @@ class TestAthlete(unittest.TestCase):
         self.personal_best = self.athlete.list_personal_bests()
 
         # Assertions 
-        self.athlete._get_page_content.assert_called_once_with({'page': 'athleteDetail', 'athleteId': self.athete_id})
+        self.athlete._get_page_content.assert_called_once_with({'page': 'athleteDetail', 'athleteId': self.athete_id, 'pbest': ''})
         self.assertEqual(self.personal_best, [])
+
+    def test_list_personal_bests_season_succes(self):
+        # Mock the _get_page_content method to avoid making actual requests
+        self.athlete._get_page_content = MagicMock()
+        self.athlete._get_page_content.return_value = values_for_testing.athlete_detail_season_page
+        # Call the list_personal_bests method
+        self.personal_best = self.athlete.list_personal_bests(season='2024')
+
+        # Assertions 
+        self.athlete._get_page_content.assert_called_once_with({'page': 'athleteDetail', 'athleteId': self.athete_id, 'pbest': '2024'})
+        self.assertEqual(self.personal_best, values_for_testing.athlete_season_best)
 
     def test_list_meets_succes(self):
         # Mock the _get_page_content method to avoid making actual requests
