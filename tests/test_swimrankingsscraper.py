@@ -186,7 +186,7 @@ class TestAthlete(unittest.TestCase):
         self.personal_best = self.athlete.list_personal_bests()
 
         # Assertions 
-        self.athlete._get_page_content.assert_called_once_with({'page': 'athleteDetail', 'athleteId': self.athete_id, 'pbest': ''})
+        self.athlete._get_page_content.assert_called_once_with({'page': 'athleteDetail', 'athleteId': self.athete_id, 'pbest': '-1'})
         self.assertEqual(self.personal_best, values_for_testing.athlete_personal_best)
 
     def test_list_personal_bests_failure(self):
@@ -197,7 +197,7 @@ class TestAthlete(unittest.TestCase):
         self.personal_best = self.athlete.list_personal_bests()
 
         # Assertions 
-        self.athlete._get_page_content.assert_called_once_with({'page': 'athleteDetail', 'athleteId': self.athete_id, 'pbest': ''})
+        self.athlete._get_page_content.assert_called_once_with({'page': 'athleteDetail', 'athleteId': self.athete_id, 'pbest': '-1'})
         self.assertEqual(self.personal_best, [])
 
     def test_list_personal_bests_season_succes(self):

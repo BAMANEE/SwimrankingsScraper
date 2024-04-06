@@ -360,7 +360,7 @@ class Athlete(ScraperMixin):
         super().__init__(sessionManager, update_interval)
         self.athlete_id = athlete_id
 
-    def list_personal_bests(self, season="") -> list:
+    def list_personal_bests(self, season="-1") -> list:
         """
         Retrieves a list of personal bests for the athlete.
 
