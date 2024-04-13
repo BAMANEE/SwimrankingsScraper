@@ -388,6 +388,39 @@ class Athlete(ScraperMixin):
             data.append({'result_id': result_id, 'event_name': event_name, 'course_length': course_length, 'time': time, 'FINA Points': fina_points})
         return data
 
+    def list_personal_details(self) -> list:
+        """
+        Retrieves personal details about the athlete.
+
+        Returns:
+        - `list`: A list containing information about the athlete.
+        """
+        params = {'page': 'athleteDetail', 'athleteId': self.athlete_id}
+        try:
+            soup = self._get_page_content(params)
+            athlete_info = soup.find('div', {'id': 'athleteinfo'})
+            name = athlete_info.find('div', {'id': 'name'})
+            nation_club = athlete_info.find('div', {'id': 'nationclub'})
+
+            personal_details = name.get_text(strip=True)
+            gender_img = name.find('img')
+
+            nation_specifics = nation_club.find('br').next_sibling.get_text(strip=True)
+            club_name = nation_club.get_text(strip=True)[len(nation_specifics):]
+        except AttributeError:
+            return []
+
+        data = []
+        data.append({ 'first_name': re.sub(r'[0-9()]', '', personal_details.split(', ')[1])})
+        data.append({ 'last_name': personal_details.split(',')[0]})
+        data.append({ 'year_of_birth': re.sub(r'\D', '', personal_details)})
+        data.append({ 'gender': f'{'m' if gender_img['src'] == 'images/gender1.png' else 'f'}'})
+        data.append({ 'club_name': club_name})
+        data.append({ 'country_name': nation_specifics[6:]})
+        data.append({ 'country_code': nation_specifics[:3]})
+
+        return data
+
     def list_meets(self) -> list:
         """
         Retrieves a list of meets in which the athlete has participated.
