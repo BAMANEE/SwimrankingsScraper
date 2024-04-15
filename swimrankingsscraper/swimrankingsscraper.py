@@ -414,7 +414,7 @@ class Athlete(ScraperMixin):
         data.append({ 'first_name': re.sub(r'[0-9()]', '', personal_details.split(', ')[1])})
         data.append({ 'last_name': personal_details.split(',')[0]})
         data.append({ 'year_of_birth': re.sub(r'\D', '', personal_details)})
-        data.append({ 'gender': f'{'m' if gender_img['src'] == 'images/gender1.png' else 'f'}'})
+        data.append({ 'gender': 'm' if gender_img['src'] == 'images/gender1.png' else 'f'})
         data.append({ 'club_name': club_name})
         data.append({ 'country_name': nation_specifics[6:]})
         data.append({ 'country_code': nation_specifics[:3]})
