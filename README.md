@@ -6,6 +6,12 @@ A library for getting information from swimrankings.net
 pip install swimrankingsscraper
 ```
 
+### Development
+```bash
+uv sync --extra dev
+uv run python -m unittest tests/test_swimrankingsscraper.py
+```
+
 ### Get started
 
 
