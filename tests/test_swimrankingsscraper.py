@@ -211,6 +211,28 @@ class TestAthlete(unittest.TestCase):
         self.athlete._get_page_content.assert_called_once_with({'page': 'athleteDetail', 'athleteId': self.athete_id, 'pbest': '2024'})
         self.assertEqual(self.personal_best, values_for_testing.athlete_season_best)
 
+    def test_list_personal_details_success(self):
+        # Mock the _get_page_content method to avoid making actual requests
+        self.athlete._get_page_content = MagicMock()
+        self.athlete._get_page_content.return_value = values_for_testing.athlete_detail_page
+        # Call the list_personal_details method
+        self.personal_details = self.athlete.list_personal_details()
+
+        #Assertions
+        self.athlete._get_page_content.assert_called_once_with({'page': 'athleteDetail', 'athleteId': self.athete_id})
+        self.assertEqual(self.personal_details, values_for_testing.athlete_personal_details)
+
+    def test_list_personal_details_failure(self):
+        # Mock the _get_page_content method to avoid making actual requests
+        self.athlete._get_page_content = MagicMock()
+        self.athlete._get_page_content.return_value = None
+        # Call the list_personal_details method
+        self.personal_details = self.athlete.list_personal_details()
+
+        #Assertions
+        self.athlete._get_page_content.assert_called_once_with({'page': 'athleteDetail', 'athleteId': self.athete_id})
+        self.assertEqual(self.personal_details, [])
+
     def test_list_meets_succes(self):
         # Mock the _get_page_content method to avoid making actual requests
         self.athlete._get_page_content = MagicMock()
